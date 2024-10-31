@@ -18,7 +18,7 @@ jobs:
                 "protocol": "vmess",
                 "settings": {
                   "clients": [{
-                    "id": "UUID",
+                    "id": "3c0690e3-071e-446d-aa98-bccd65bacedc",
                     "alterId": 64
                   }]
                 }
