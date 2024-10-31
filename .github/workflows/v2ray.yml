@@ -14,13 +14,19 @@ jobs:
         run: |
           echo '{
             "inbounds": [{
-              "port": 8080,
-              "protocol": "vmess",
+              "port": 443,
+              "protocol": "vless",
               "settings": {
                 "clients": [{
-                  "id": "UUID",
-                  "alterId": 64
-                }]
+                  "id": "3c0690e3-071e-446d-aa98-bccd65bacedc"
+                }],
+                "decryption": "none"
+              },
+              "streamSettings": {
+                "network": "ws",
+                "wsSettings": {
+                  "path": "/vless"  # مسیر WebSocket سفارشی
+                }
               }
             }],
             "outbounds": [{
@@ -28,7 +34,8 @@ jobs:
               "settings": {}
             }]
           }' > xray/config.json
-          cat xray/config.json  # اضافه کردن این خط برای نمایش کانفیگ در لاگ
+          echo "Xray configuration file content:"
+          cat xray/config.json  # نمایش کانفیگ در لاگ
       - name: Start Xray
         run: |
           nohup ./xray/xray -config ./xray/config.json &
