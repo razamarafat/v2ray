@@ -5,6 +5,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Get Server IP
+        run: |
+          echo "Server IP address:"
+          curl https://api.ipify.org  # نمایش IP سرور در لاگ
       - name: Install Xray
         run: |
           wget https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip -O xray.zip
@@ -18,14 +22,14 @@ jobs:
               "protocol": "vless",
               "settings": {
                 "clients": [{
-                  "id": "3c0690e3-071e-446d-aa98-bccd65bacedc"
+                  "id": "UUID"
                 }],
                 "decryption": "none"
               },
               "streamSettings": {
                 "network": "ws",
                 "wsSettings": {
-                  "path": "/vless"  # مسیر WebSocket سفارشی
+                  "path": "/yourpath"
                 }
               }
             }],
@@ -34,8 +38,3 @@ jobs:
               "settings": {}
             }]
           }' > xray/config.json
-          echo "Xray configuration file content:"
-          cat xray/config.json  # نمایش کانفیگ در لاگ
-      - name: Start Xray
-        run: |
-          nohup ./xray/xray -config ./xray/config.json &
