@@ -6,14 +6,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Get Server IP
+        id: get_ip
         run: |
-          echo "Server IP address:"
-          curl https://api.ipify.org  # نمایش IP سرور در لاگ
+          export SERVER_IP=$(curl -s https://api.ipify.org)
+          echo "SERVER_IP=$SERVER_IP" >> $GITHUB_ENV
+          echo "Server IP address: $SERVER_IP"
+
       - name: Install Xray
         run: |
           wget https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip -O xray.zip
           unzip xray.zip -d xray
           chmod +x xray/xray
+
       - name: Configure Xray
         run: |
           echo '{
@@ -22,14 +26,14 @@ jobs:
               "protocol": "vless",
               "settings": {
                 "clients": [{
-                  "id": "UUID"
+                  "id": "3c0690e3-071e-446d-aa98-bccd65bacedc"
                 }],
                 "decryption": "none"
               },
               "streamSettings": {
                 "network": "ws",
                 "wsSettings": {
-                  "path": "/yourpath"
+                  "path": "/vless"
                 }
               }
             }],
@@ -38,3 +42,19 @@ jobs:
               "settings": {}
             }]
           }' > xray/config.json
+          echo "Xray configuration file content:"
+          cat xray/config.json
+
+      - name: Start Xray
+        run: |
+          nohup ./xray/xray -config ./xray/config.json &
+
+      - name: Generate V2RayNG Link
+        run: |
+          UUID="UUID"  # اینجا UUID خودتان را وارد کنید
+          SERVER_IP=$SERVER_IP
+          PORT=443
+          PATH="/yourpath"
+          VLESS_LINK="vless://${UUID}@${SERVER_IP}:${PORT}?path=${PATH}&security=none&encryption=none&type=ws#GitHub_Xray_Server"
+          echo "V2RayNG Config Link:"
+          echo "$VLESS_LINK"
