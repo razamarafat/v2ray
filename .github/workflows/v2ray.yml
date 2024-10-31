@@ -18,7 +18,7 @@ jobs:
               "protocol": "vmess",
               "settings": {
                 "clients": [{
-                  "id": "3c0690e3-071e-446d-aa98-bccd65bacedc",
+                  "id": "UUID",
                   "alterId": 64
                 }]
               }
@@ -28,6 +28,7 @@ jobs:
               "settings": {}
             }]
           }' > xray/config.json
+          cat xray/config.json  # اضافه کردن این خط برای نمایش کانفیگ در لاگ
       - name: Start Xray
         run: |
           nohup ./xray/xray -config ./xray/config.json &
